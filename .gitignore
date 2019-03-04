@@ -1,1 +1,7 @@
 #
+/.metadata/
+
+#ignore project files
+*.project
+*.pydevproject
+

@@ -6,14 +6,18 @@ Created on Feb 28, 2019
 import numpy as np
 
 def logsig(x):
+    """
+    sigmoide function
+    """
     return 1.0 / ( 1.0 + np.exp( - x ))
 
 def train(data, target, number_of_iterations, lr=0.01):
     """
-    run a simple perceptron
+    train simple perceptron using  the gradient descent algorithm
     """    
     n, d = data.shape
     assert n == target.size, "target size incompatible with data size"
+    
     ones = np.ones((n,1))
     data = np.append(ones, data, axis = 1)
     d = d + 1    
@@ -25,11 +29,11 @@ def train(data, target, number_of_iterations, lr=0.01):
         dif =  - np.mean (   (target  - y ) * ( y * ( 1.0 - y ) ) * np.transpose(data) , axis = 1  )        
         w = w - lr * dif
         if it % 1000 == 0 :          
-            print(loss)
+            print("loss ({}): {}".format(it, loss))
     return w
     
 def predict(data, w): 
-    n, d = data.shape   
+    n = data.shape[0]   
     ones = np.ones((n,1))
     data = np.append(ones, data, axis = 1)
     return logsig(np.dot(data, w))
