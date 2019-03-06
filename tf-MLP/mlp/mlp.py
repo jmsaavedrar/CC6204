@@ -33,7 +33,11 @@ class MLP:
         self.filename_train = os.path.join(self.datadir, "train.tfrecords")
         self.filename_test = os.path.join(self.datadir, "test.tfrecords")         
         #print(" mean {}".format(self.mean_img.shape))        
-                    
+        self.input_params = { 'batch_size' : self.batch_size,
+                            'number_of_batches': self.number_of_batches,
+                            'number_of_epochs': self.number_of_epochs,
+                            'K': self.K
+                }            
     def train(self):
         """training"""
         #-using device gpu or cpu
@@ -53,15 +57,33 @@ class MLP:
             #
             tf.logging.set_verbosity(tf.logging.INFO) # Just to have some logs to display for demonstration
             #training
-            input_params = { 'batch_size' : self.batch_size,
-                            'number_of_batches': self.number_of_batches,
-                            'number_of_epochs': self.number_of_epochs,
-                            'K': self.K
-                }
-            train_spec = tf.estimator.TrainSpec(input_fn = lambda: data.input_fn(self.filename_train, input_params, self.mean_vector, True),
+            
+            train_spec = tf.estimator.TrainSpec(input_fn = lambda: data.input_fn(self.filename_train, self.input_params, self.mean_vector, True),
                                                  max_steps = self.number_of_iterations)
             #max_steps is not useful when inherited checkpoint is used
-            eval_spec = tf.estimator.EvalSpec(input_fn = lambda: data.input_fn(self.filename_test, input_params, self.mean_vector, False),
+            eval_spec = tf.estimator.EvalSpec(input_fn = lambda: data.input_fn(self.filename_test, self.input_params, self.mean_vector, False),
                                               start_delay_secs = 30)
             #
             tf.estimator.train_and_evaluate(classifier, train_spec, eval_spec)
+            
+    def test(self):
+        """test checkpoint exist """
+        assert os.path.exists(os.path.join(self.modeldir, "checkpoint")), "Checkpoint file does not exist in {}".format(self.modeldir)
+        """testing"""
+        with tf.device(self.device):
+            tf.logging.set_verbosity(tf.logging.INFO)
+            estimator_config = tf.estimator.RunConfig(model_dir = self.modeldir)
+            
+            classifier = tf.estimator.Estimator( model_fn = model.model_fn,
+                                                 config = estimator_config,
+                                                 params = {'learning_rate' : self.learning_rate,
+                                                           'number_of_classes' : self.number_of_classes,                                                                                                                    
+                                                           'model_dir': self.modeldir,
+                                                           'K': self.K                                                           
+                                                           }
+                                                 )
+             
+            result = classifier.evaluate(input_fn = lambda: data.input_fn(self.filename_test, self.input_params, self.mean_vector, True))
+            print(result)        
+            
+            

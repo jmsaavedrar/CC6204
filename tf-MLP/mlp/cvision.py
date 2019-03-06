@@ -33,7 +33,8 @@ def getHistogramOfOrientations(image, k):
     gy = ndimage.convolve(image.astype(np.float32), sobel_y, mode = 'constant', cval = 0)
     ang = np.arctan2(gy, gx)
     ang[ang < 0] = ang[ang < 0] + np.pi    
-    magnitude = np.sqrt(np.power(gx, 2.0) + np.power(gy, 2.0) )    
+    magnitude = np.sqrt(np.power(gx, 2.0) + np.power(gy, 2.0) )
+    magnitude[ magnitude < 0.1] = 0    
     indx = np.round((ang / np.pi) * (k - 1))    
     histogram = np.zeros(shape = k, dtype = np.float32)    
     for i in range(k) :
