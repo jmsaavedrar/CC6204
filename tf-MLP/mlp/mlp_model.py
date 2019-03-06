@@ -12,25 +12,24 @@ def gaussian_weights(shape,  mean, stddev):
                                stddev = stddev)
 
 
-def fc_layer(input, size, name, use_relu=True):
+def fc_layer(_input, size, name, use_relu=True):
     """
     a fully connected layer
     """         
     # shape is a 1D tensor with 4 values
-    num_features_in = input.get_shape().as_list()[-1]
+    num_features_in = _input.get_shape().as_list()[-1]
     #reshape to  1D vector    
     shape = [num_features_in, size]
     W = tf.Variable(gaussian_weights(shape, 0.0, 0.02), name=name)     
     b = tf.Variable(tf.zeros(size))
     #just a  multiplication between input[N_in x D]xW[N_in x N_out]
-    layer = tf.add( tf.matmul(input, W) ,  b)        
+    layer = tf.add( tf.matmul(_input, W) ,  b)        
     if use_relu:
-        layer=tf.nn.sigmoid(layer)
+        layer=tf.nn.relu(layer)
     return  layer
 
 def mlp_fn(features,  input_size, n_classes):    
-    with tf.variable_scope("mlp_scope"):        
-        #reshape input to fit a  4D tensor                   
+    with tf.variable_scope("mlp_scope"):                                
         # fc 1
         features = tf.reshape(features, [-1, input_size])
         print(" features {} ".format(features.get_shape().as_list()))
@@ -38,16 +37,11 @@ def mlp_fn(features,  input_size, n_classes):
         #fc5 = layers.dropout_layer(fc5, 0.8)
         print(" fc1: {} ".format(fc1.get_shape().as_list()))
         #fc 6
-        fc2 = fc_layer(fc1, 100, name = 'fc2')    
-        #fc6 = layers.dropout_layer(fc6, 0.8)
+        fc2 = fc_layer(fc1, 100, name = 'fc2')            
         print(" fc2: {} ".format(fc2.get_shape().as_list()))
         #fully connected
-        
-    with tf.variable_scope("class_layer"):        
         fc3 = fc_layer(fc2, n_classes, name = 'fc3', use_relu = False)
-        print(" fc3: {} ".format(fc3.get_shape().as_list()))    
-        #gap = layers.gap_layer(conv_5) # 8x8
-        #print(" gap: {} ".format(gap.get_shape().as_list()))    
+        print(" fc3: {} ".format(fc3.get_shape().as_list()))                
     return {"output": fc3}
 
 #defining a model that feeds the Estimator
@@ -56,7 +50,7 @@ def model_fn (features, labels, mode, params):
        The output is an EstimatorSpec
     """
     
-    net = mlp_fn(features, 72, params['number_of_classes'])                    
+    net = mlp_fn(features, params['K'], params['number_of_classes'])                    
     #    
     output = net["output"]
                 

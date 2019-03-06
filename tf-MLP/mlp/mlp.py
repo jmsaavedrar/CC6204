@@ -46,7 +46,8 @@ class MLP:
                                                  config = estimator_config,
                                                  params = {'learning_rate' : self.learning_rate,
                                                            'number_of_classes' : self.number_of_classes,                                                                                                                    
-                                                           'model_dir': self.modeldir                                                           
+                                                           'model_dir': self.modeldir,
+                                                           'K': self.K                                                           
                                                            }
                                                  )
             #
