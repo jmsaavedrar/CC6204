@@ -33,7 +33,7 @@ def _floatArray_feature(value):
 #define the input function for training and testing, the data is read from tfrecords
 def input_fn(filename,  input_params, mean_vector, is_training):     
     dataset = tf.data.TFRecordDataset(filename)
-    dataset = dataset.map(lambda x: parser_tfrecord(x,10, input_params['K'], mean_vector))
+    dataset = dataset.map(lambda x: parser_tfrecord(x,input_params['number_of_classes'], input_params['input_size'], mean_vector))
     dataset = dataset.batch(input_params['batch_size'])   
     if is_training:
         #shuffle the batches
@@ -86,16 +86,17 @@ def readDataFromTextFile(str_path, dataset = "train" , shuf = True):
     return filenames, labels
 
 #%%   
-def createTFRecordFromList(filenames, labels, target_shape, tfr_filename):    
+def createTFRecordFromList(filenames, labels, input_size, tfr_filename):    
     writer = tf.python_io.TFRecordWriter(tfr_filename)    
     assert len(filenames) == len(labels)
-    mean_vector = np.zeros(72, dtype=np.float32)    
+    mean_vector = np.zeros(input_size, dtype=np.float32)    
     for i in range(len(filenames)):        
         if i % 100 == 0 or (i + 1) == len(filenames):
             print("---{}".format(i))           
         image = readImage(filenames[i])
-        image = processImage(image, target_shape)
-        features = cvision.getHistogramOfOrientations(image, 72)            
+        #image = processImage(image, target_shape)
+        features = cvision.getHOG(image)
+        assert features.size == input_size, "{} != {}".format(features.size, input_size)            
         #create a feature                
         feature = {'train/feature': _floatArray_feature(features), 
                    'train/label': _int64_feature(labels[i])}
@@ -110,7 +111,7 @@ def createTFRecordFromList(filenames, labels, target_shape, tfr_filename):
     return mean_vector
 #%%
 
-def createTFRecord(str_path, id_type, im_size):    
+def createTFRecord(str_path, id_type, input_size):    
     """ 
     id_type = 0: only train 
               1: only test    
@@ -119,13 +120,12 @@ def createTFRecord(str_path, id_type, im_size):
     number_of_channels: this is the number of channels of the input
     processFun: processing function which depends on the problem we are trying to solve
     """
-    #saving metadata
-    image_shape = np.array(im_size)    
+    #saving metadata        
     #------------- creating train data
     if ( id_type + 1 ) & 1 : # train   ( 0 + 1 ) & 1  == 1 
         filenames, labels = readDataFromTextFile(str_path, dataset="train", shuf = True)    
         tfr_filename = os.path.join(str_path, "train.tfrecords")
-        training_mean = createTFRecordFromList(filenames, labels, image_shape, tfr_filename)
+        training_mean = createTFRecordFromList(filenames, labels, input_size, tfr_filename)
         print("train_record saved at {}.".format(tfr_filename))
         #saving training mean
         mean_file = os.path.join(str_path, "mean.dat")
@@ -136,20 +136,20 @@ def createTFRecord(str_path, id_type, im_size):
     if ( id_type + 1 ) & 2 : # test ( 1 + 1 ) & 2  == 2
         filenames, labels = readDataFromTextFile(str_path, dataset="test", shuf = True)  
         tfr_filename = os.path.join(str_path, "test.tfrecords")
-        createTFRecordFromList(filenames, labels, image_shape, tfr_filename)
+        createTFRecordFromList(filenames, labels, input_size, tfr_filename)
         print("test_record saved at {}.".format(tfr_filename))    
-            
-    metadata_array = image_shape
-    #saving metadata file    
+                
+    #saving metadata file
+    metadata = np.array([input_size])    
     metadata_file = os.path.join(str_path, "metadata.dat")
-    metadata_array.astype(np.int32).tofile(metadata_file)
+    metadata.astype(np.int32).tofile(metadata_file)
     print("metadata_file saved at {}.".format(metadata_file))      
 # %% parser sk
 #---------parser_tfrecord for mnist
-def parser_tfrecord(serialized_example,   number_of_classes, k, mean_vector ):    
+def parser_tfrecord(serialized_example,   number_of_classes, input_size, mean_vector ):    
     features = tf.parse_example([serialized_example],
                                 features={
-                                        'train/feature': tf.FixedLenFeature([k], tf.float32),
+                                        'train/feature': tf.FixedLenFeature([input_size], tf.float32),
                                         'train/label': tf.FixedLenFeature([], tf.int64)
                                         })    
     feature = features['train/feature']    

@@ -11,8 +11,7 @@ class MLP:
         #reading configuration file            
         self.device = params['device']
         self.modeldir = params['model_dir']         
-        self.datadir = params['data_dir']
-        self.K = params['K']
+        self.datadir = params['data_dir']        
         self.learning_rate = params['learning_rate']
         self.number_of_classes = params['number_of_classes']
         self.number_of_iterations = params['number_of_iterations']
@@ -25,7 +24,7 @@ class MLP:
         filename_mean = os.path.join(self.datadir, "mean.dat")
         metadata_file = os.path.join(self.datadir, "metadata.dat")
         #reading metadata
-        self.image_shape = np.fromfile(metadata_file, dtype=np.int32)        
+        self.input_size = np.fromfile(metadata_file, dtype=np.int32)[0]        
         #load mean
         self.mean_vector = np.fromfile(filename_mean, dtype=np.float32)
         print("mean_vector {}".format(self.mean_vector.shape))                
@@ -36,8 +35,14 @@ class MLP:
         self.input_params = { 'batch_size' : self.batch_size,
                             'number_of_batches': self.number_of_batches,
                             'number_of_epochs': self.number_of_epochs,
-                            'K': self.K
-                }            
+                            'input_size': self.input_size,
+                            'number_of_classes' : self.number_of_classes,
+                }
+        
+        self.estimator_params = {'learning_rate' : self.learning_rate,
+                             'number_of_classes' : self.number_of_classes,                                                                                                                    
+                             'model_dir': self.modeldir,
+                             'input_size': self.input_size}
     def train(self):
         """training"""
         #-using device gpu or cpu
@@ -48,19 +53,14 @@ class MLP:
             
             classifier = tf.estimator.Estimator( model_fn = model.model_fn,
                                                  config = estimator_config,
-                                                 params = {'learning_rate' : self.learning_rate,
-                                                           'number_of_classes' : self.number_of_classes,                                                                                                                    
-                                                           'model_dir': self.modeldir,
-                                                           'K': self.K                                                           
-                                                           }
-                                                 )
+                                                 params = self.estimator_params )
             #
             tf.logging.set_verbosity(tf.logging.INFO) # Just to have some logs to display for demonstration
             #training
             
             train_spec = tf.estimator.TrainSpec(input_fn = lambda: data.input_fn(self.filename_train, self.input_params, self.mean_vector, True),
                                                  max_steps = self.number_of_iterations)
-            #max_steps is not useful when inherited checkpoint is used
+            #max_steps is not useful when inherited checkspoint is used
             eval_spec = tf.estimator.EvalSpec(input_fn = lambda: data.input_fn(self.filename_test, self.input_params, self.mean_vector, False),
                                               start_delay_secs = 30)
             #
@@ -76,12 +76,7 @@ class MLP:
             
             classifier = tf.estimator.Estimator( model_fn = model.model_fn,
                                                  config = estimator_config,
-                                                 params = {'learning_rate' : self.learning_rate,
-                                                           'number_of_classes' : self.number_of_classes,                                                                                                                    
-                                                           'model_dir': self.modeldir,
-                                                           'K': self.K                                                           
-                                                           }
-                                                 )
+                                                 params = self.estimator_params )
              
             result = classifier.evaluate(input_fn = lambda: data.input_fn(self.filename_test, self.input_params, self.mean_vector, True))
             print(result)        

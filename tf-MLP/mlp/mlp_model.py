@@ -50,7 +50,7 @@ def model_fn (features, labels, mode, params):
        The output is an EstimatorSpec
     """
     
-    net = mlp_fn(features, params['K'], params['number_of_classes'])                    
+    net = mlp_fn(features, params['input_size'], params['number_of_classes'])                    
     #    
     output = net["output"]
                 
@@ -67,8 +67,7 @@ def model_fn (features, labels, mode, params):
         # Evaluate the accuracy of the model
         acc_op = tf.metrics.accuracy(labels=idx_true_class, predictions=idx_predicted_class)    
         # Define loss - e.g. cross_entropy - mean(cross_entropy x batch)
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(logits = output, labels = labels)
-        #mse =tf.losses.mean_squared_error(predictions = predicted_probs, labels = labels)         
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(logits = output, labels = labels)                 
         loss = tf.reduce_mean(cross_entropy)
         optimizer = tf.train.AdamOptimizer(learning_rate = params['learning_rate'])
         train_op = optimizer.minimize(loss, global_step=tf.train.get_global_step())        

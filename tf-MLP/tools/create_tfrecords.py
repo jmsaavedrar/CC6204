@@ -10,8 +10,8 @@ import mlp.data as data
 
 if __name__ == '__main__' :
     #datadir = "/home/vision/smb-datasets/SBIR/Quickdraw-10c"
-    datadir = "/home/vision/smb-datasets/MNIST-small"
-    data.createTFRecord(datadir, 2, (64,64))
+    datadir = "/home/vision/smb-datasets/SBIR/QuickDraw-10c"
+    data.createTFRecord(datadir, 2, 128)
     print("tfrecords were created OK")
     
     

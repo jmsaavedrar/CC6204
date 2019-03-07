@@ -6,6 +6,8 @@ Created on Mar 5, 2019
 A set of functions that applies computer vision methods
 '''
 
+import skimage.feature as feat
+import skimage.transform as trans
 import skimage.io as io
 from scipy import ndimage
 import numpy as np
@@ -22,6 +24,12 @@ def toUINT8(image) :
     image = image.astype(np.uint8, copy=False)
     return image
 
+def getHOG(image):
+    image = trans.resize(image, (64,64))
+    image = toUINT8(image)    
+    fd= feat.hog(image, orientations=8, pixels_per_cell=(16, 16), cells_per_block=(1, 1), feature_vector = True)    
+    return fd
+    
 def getHistogramOfOrientations(image, k):
     """
     image : numpy image
@@ -49,8 +57,10 @@ if __name__ == '__main__' :
     filename = sys.argv[1]
     image = io.imread(filename, as_gray = True)
     image = toUINT8(image)    
-    h = getHistogramOfOrientations(image, 36)
+    #h = getHistogramOfOrientations(image, 36)
+    h = getHOG(image)
     print(h)
+    print(h.shape)
         
     
     
