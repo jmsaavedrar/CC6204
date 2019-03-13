@@ -18,10 +18,11 @@ if __name__ == "__main__" :
     #data for class 1      
     data_1 = data[50:,:]    
     fig, x = plt.subplots(1)
+    x.set_xlabel("petal length")
+    x.set_ylabel("sepal width")
     x.plot(data_0[:,0], data_0[:,1], 'r+' )    
     x.plot(data_1[:,0], data_1[:,1], 'bo' )
     x.plot()
     plt.show()
      
     
-

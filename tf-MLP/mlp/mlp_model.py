@@ -69,7 +69,7 @@ def model_fn (features, labels, mode, params):
         # Define loss - e.g. cross_entropy - mean(cross_entropy x batch)
         cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(logits = output, labels = labels)                 
         loss = tf.reduce_mean(cross_entropy)
-        optimizer = tf.train.AdamOptimizer(learning_rate = params['learning_rate'])
+        optimizer = tf.train.MomentumOptimizer(learning_rate = params['learning_rate'], momentum = 0.9)
         train_op = optimizer.minimize(loss, global_step=tf.train.get_global_step())        
         #EstimatorSpec 
         estim_specs = tf.estimator.EstimatorSpec(
