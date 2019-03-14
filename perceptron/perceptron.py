@@ -16,7 +16,7 @@ def logsig(x):
 
 def train(data, target, number_of_iterations, lr=0.01):
     """
-    train simple perceptron using  the gradient descent algorithm
+    training a simple perceptron using  the gradient descent algorithm
     """    
     n, d = data.shape
     assert n == target.size, "target size incompatible with data size"
