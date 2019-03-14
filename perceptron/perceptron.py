@@ -26,7 +26,7 @@ def train(data, target, number_of_iterations, lr=0.01):
     d = d + 1    
     w = np.random.rand(d)
     for it in range(number_of_iterations) :
-        v = np.dot(data,w)        
+        v = np.matmul(data,w)
         y = logsig(v)        
         loss = np.mean(0.5 * ((target - y) ** 2))      
         #using MSE loss 
