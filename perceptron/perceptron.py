@@ -28,10 +28,11 @@ def train(data, target, number_of_iterations, lr=0.01):
     for it in range(number_of_iterations) :
         v = np.matmul(data,w)
         y = logsig(v)        
-        loss = np.mean(0.5 * ((target - y) ** 2))      
-        #using MSE loss 
+        #using mse loss
+        #loss = np.mean(0.5 * ((target - y) ** 2))      
         #dif =   np.mean((y - target) * (y * (1.0 - y)) * np.transpose(data) , axis = 1)
         #using Cross-Entropy loss        
+        loss = - np.mean((target * np.log(y) + (1 - target) * np.log(1 - y)))
         dif =   np.mean( (y - target) * np.transpose(data) , axis = 1)
         w = w - lr * dif
         if it % 100 == 0 :          
