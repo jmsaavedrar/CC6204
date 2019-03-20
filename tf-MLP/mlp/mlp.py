@@ -79,6 +79,23 @@ class MLP:
                                                  params = self.estimator_params )
              
             result = classifier.evaluate(input_fn = lambda: data.input_fn(self.filename_test, self.input_params, self.mean_vector, True))
-            print(result)        
+            print(result)
+    
+          
+    def save_model(self):
+        assert os.path.exists(os.path.join(self.modeldir, "checkpoint")), "Checkpoint file does not exist in {}".format(self.modeldir)
+        
+        classifier = tf.estimator.Estimator( model_fn = model.model_fn,
+                                             model_dir=self.modeldir,
+                                             params = self.estimator_params )        
+        #
+        def serving_input_receiver_fn() :
+            feat_spec = tf.placeholder(dtype=tf.float32, shape=[None, self.input_size])            
+            return tf.estimator.export.TensorServingInputReceiver(feat_spec, feat_spec)
+           
+        str_model = classifier.export_saved_model(self.modeldir, serving_input_receiver_fn)
+        final_str_model = os.path.join(self.datadir, "mlp-model")
+        os.rename(str_model, final_str_model)
+        print("The models was successfully saved at {}".format(final_str_model))        
             
             

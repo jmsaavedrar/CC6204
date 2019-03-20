@@ -42,6 +42,13 @@ def input_fn(filename,  input_params, mean_vector, is_training):
         # for testing shuffle and repeat are not required    
     return dataset
 #%%
+def input_fn_for_prediction(filename, mean_vector, input_size):                
+    image = readImage(filename)        
+    features = cvision.getHOG(image)
+    features = features - mean_vector
+    features = features.astype(np.float32)
+    features = np.reshape(features, [1, input_size])
+    return features
  
 def readImage(filename):
     """ readImage using skimage """    

@@ -25,7 +25,7 @@ def fc_layer(_input, size, name, use_relu=True):
     #just a  multiplication between input[N_in x D]xW[N_in x N_out]
     layer = tf.add( tf.matmul(_input, W) ,  b)        
     if use_relu:
-        layer=tf.nn.relu(layer)
+        layer=tf.nn.sigmoid(layer)
     return  layer
 
 def mlp_fn(features,  input_size, n_classes):    
@@ -41,7 +41,8 @@ def mlp_fn(features,  input_size, n_classes):
         print(" fc2: {} ".format(fc2.get_shape().as_list()))
         #fully connected
         fc3 = fc_layer(fc2, n_classes, name = 'fc3', use_relu = False)
-        print(" fc3: {} ".format(fc3.get_shape().as_list()))                
+        print(" fc3: {} ".format(fc3.get_shape().as_list()))
+                        
     return {"output": fc3}
 
 #defining a model that feeds the Estimator
