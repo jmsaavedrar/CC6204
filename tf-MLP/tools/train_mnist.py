@@ -15,7 +15,7 @@ if __name__ == "__main__" :
               "data_dir" : "/home/vision/smb-datasets/MNIST-small",              
               "learning_rate" : 0.001,  
               "number_of_classes" : 10,
-              "number_of_iterations" : 2000,
+              "number_of_iterations" : 5000,
               "batch_size" : 80,
               "data_size" : 5000,
         }               
