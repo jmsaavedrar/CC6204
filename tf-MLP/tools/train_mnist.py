@@ -23,5 +23,7 @@ if __name__ == "__main__" :
     print("MLP initialized ok")
     print("--------start training")
     my_mlp.train()
+    #Use my_mlp.test() for testing
+    #Use my_mlp.save_model() for saving models that will be used for fast_prediction
     print("--------end training")
     
