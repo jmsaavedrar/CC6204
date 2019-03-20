@@ -9,6 +9,12 @@ if __name__ == "__main__" :
                "device" : "/gpu:0",                
                "number_of_classes" : 12
           }
+    
+#     params = { "device" : "/gpu:0",
+#               "model_dir" : "/home/vision/smb-datasets/MNIST-small/models",
+#               "data_dir" : "/home/vision/smb-datasets/MNIST-small",                          
+#               "number_of_classes" : 10              
+#         }
     predictor = fp.FastPredictor(params)
     while True :
         filename = input("Image: ")    
