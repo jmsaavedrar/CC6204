@@ -23,7 +23,7 @@ def parser_tfrecord_simple(serialized_example, input_size):
 
 #%% MAIN
 if __name__ == '__main__':        
-    datadir = "/home/vision/smb-datasets/MNIST-small"
+    datadir = "/home/vision/smb-datasets/SBIR/QuickDraw-10c"
           
     filename = os.path.join(datadir, 'test.tfrecords' ) 
     assert(os.path.exists(filename))

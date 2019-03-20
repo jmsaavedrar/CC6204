@@ -30,7 +30,7 @@ def train(data, target, number_of_iterations, lr=0.01):
         y = logsig(v)        
         #using mse loss
         #loss = np.mean(0.5 * ((target - y) ** 2))      
-        #dif =   np.mean((y - target) * (y * (1.0 - y)) * np.transpose(data) , axis = 1)
+        #dif =  np.mean((y - target) * (y * (1.0 - y)) * np.transpose(data) , axis = 1)
         #using Cross-Entropy loss        
         loss = - np.mean((target * np.log(y) + (1 - target) * np.log(1 - y)))
         dif =   np.mean( (y - target) * np.transpose(data) , axis = 1)
@@ -43,6 +43,6 @@ def predict(data, w):
     n = data.shape[0]   
     ones = np.ones((n,1))
     data = np.append(ones, data, axis = 1)
-    return logsig(np.dot(data, w))
+    return logsig(np.matmul(data, w))
     
     

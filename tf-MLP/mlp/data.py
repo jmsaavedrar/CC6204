@@ -43,17 +43,11 @@ def input_fn(filename,  input_params, mean_vector, is_training):
     return dataset
 #%%
  
-
 def readImage(filename):
     """ readImage using skimage """    
     image = io.imread(filename, as_gray = True)    
     image = cvision.toUINT8(image)                 
     return image
-
-def processImage(image, shape):
-    image = transf.resize(image, shape)
-    image = cvision.toUINT8(image)    
-    return image 
 #%% 
 def validateLabels(labels) :
     """Process labels checking if these are in the correct format [int]
@@ -65,12 +59,15 @@ def validateLabels(labels) :
     if (len(label_set) == max(label_set) + 1) and (min(label_set) == 0):
         return new_labels
     else:            
-        raise ValueError("Some codes are missed in label set! {}".format(label_set))
+        raise ValueError("Some codes are missed in the label set! {}".format(label_set))
         
 #%%
 def readDataFromTextFile(str_path, dataset = "train" , shuf = True):    
     """read data from text files
-    and apply shuffle by default 
+    and  shuffle it by default
+    str_path: path where data can be found
+    dataset: train or test
+    shuf: Truel or Flase for shuffling 
     """            
     datafile = os.path.join(str_path, dataset + ".txt")    
     assert os.path.exists(datafile)        
@@ -87,14 +84,20 @@ def readDataFromTextFile(str_path, dataset = "train" , shuf = True):
 
 #%%   
 def createTFRecordFromList(filenames, labels, input_size, tfr_filename):    
+    """
+    filenames: a list of image filenames
+    labels: a list of target labels
+    input_size: feature vector size
+    trf_filename: filename of the destine tfrecord 
+    """
     writer = tf.python_io.TFRecordWriter(tfr_filename)    
-    assert len(filenames) == len(labels)
+    assert len(filenames) == len(labels), "filenames and labels should have the same size"
     mean_vector = np.zeros(input_size, dtype=np.float32)    
     for i in range(len(filenames)):        
         if i % 100 == 0 or (i + 1) == len(filenames):
             print("---{}".format(i))           
         image = readImage(filenames[i])
-        #image = processImage(image, target_shape)
+        #here  the feature vector is computed
         features = cvision.getHOG(image)
         assert features.size == input_size, "{} != {}".format(features.size, input_size)            
         #create a feature                
@@ -102,43 +105,39 @@ def createTFRecordFromList(filenames, labels, input_size, tfr_filename):
                    'train/label': _int64_feature(labels[i])}
         #crate an example protocol buffer
         example = tf.train.Example(features = tf.train.Features(feature=feature))        
-        #serialize to string an write on the file
+        #serialize to string and write in file
         writer.write(example.SerializeToString())
         mean_vector = mean_vector + features / len(filenames)            
-    #serialize mean_image
     writer.close()
     sys.stdout.flush()
     return mean_vector
 #%%
 
 def createTFRecord(str_path, id_type, input_size):    
-    """ 
+    """
+    A function for creating a tfrecords for training and test 
+    str_path: path where data is stored
     id_type = 0: only train 
               1: only test    
               2: both
-    im_shape: size of the input image (height, width)          
-    number_of_channels: this is the number of channels of the input
-    processFun: processing function which depends on the problem we are trying to solve
-    """
-    #saving metadata        
+    input_size: feature vector size                  
+    """        
     #------------- creating train data
     if ( id_type + 1 ) & 1 : # train   ( 0 + 1 ) & 1  == 1 
         filenames, labels = readDataFromTextFile(str_path, dataset="train", shuf = True)    
         tfr_filename = os.path.join(str_path, "train.tfrecords")
-        training_mean = createTFRecordFromList(filenames, labels, input_size, tfr_filename)
+        training_mean_fv = createTFRecordFromList(filenames, labels, input_size, tfr_filename)
         print("train_record saved at {}.".format(tfr_filename))
-        #saving training mean
-        mean_file = os.path.join(str_path, "mean.dat")
-        print("mean_file {} {}".format(training_mean.shape, training_mean))
-        training_mean.astype(np.float32).tofile(mean_file)
+        #saving training mean feature vector
+        mean_file = os.path.join(str_path, "mean.dat")        
+        training_mean_fv.astype(np.float32).tofile(mean_file)
         print("mean_file saved at {}.".format(mean_file))  
     #-------------- creating test data    
     if ( id_type + 1 ) & 2 : # test ( 1 + 1 ) & 2  == 2
         filenames, labels = readDataFromTextFile(str_path, dataset="test", shuf = True)  
         tfr_filename = os.path.join(str_path, "test.tfrecords")
         createTFRecordFromList(filenames, labels, input_size, tfr_filename)
-        print("test_record saved at {}.".format(tfr_filename))    
-                
+        print("test_record saved at {}.".format(tfr_filename))                    
     #saving metadata file
     metadata = np.array([input_size])    
     metadata_file = os.path.join(str_path, "metadata.dat")
