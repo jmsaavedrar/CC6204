@@ -155,6 +155,6 @@ def parser_tfrecord(serialized_example,   number_of_classes, input_size, mean_ve
     feature = feature - tf.cast(tf.constant(mean_vector), tf.float32)
     #one-hot 
     label = tf.one_hot(tf.cast(features['train/label'], tf.int32), number_of_classes)
-    #label = tf.reshape(label, [number_of_classes])
+    label = tf.reshape(label, [number_of_classes])
     label = tf.cast(label, tf.float32)
     return feature, label
