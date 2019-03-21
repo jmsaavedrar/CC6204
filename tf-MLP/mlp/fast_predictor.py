@@ -36,5 +36,5 @@ class FastPredictor:
                                         self.mean_vector, self.input_size)            
             predictions = self.predictor({"input":input_image})
             predictions = predictions['predicted_probs'][0]            
-            idx_sorted = np.flip(np.argsort(predictions))                        
+            idx_sorted = np.flip(np.argsort(predictions), 0)                        
         return idx_sorted[0], predictions[idx_sorted][0]
