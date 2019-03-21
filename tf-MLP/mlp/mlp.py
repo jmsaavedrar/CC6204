@@ -62,7 +62,7 @@ class MLP:
                                                  max_steps = self.number_of_iterations)
             #max_steps is not useful when inherited checkspoint is used
             eval_spec = tf.estimator.EvalSpec(input_fn = lambda: data.input_fn(self.filename_test, self.input_params, self.mean_vector, False),
-                                              start_delay_secs = 30)
+                                              throttle_secs = 20)
             #
             tf.estimator.train_and_evaluate(classifier, train_spec, eval_spec)
             
