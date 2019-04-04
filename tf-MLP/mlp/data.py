@@ -74,7 +74,7 @@ def readDataFromTextFile(str_path, dataset = "train" , shuf = True):
     and  shuffle it by default
     str_path: path where data can be found
     dataset: train or test
-    shuf: Truel or Flase for shuffling 
+    shuf: True or Flase for shuffling 
     """            
     datafile = os.path.join(str_path, dataset + ".txt")    
     assert os.path.exists(datafile)        
