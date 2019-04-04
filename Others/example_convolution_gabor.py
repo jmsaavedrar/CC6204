@@ -1,8 +1,14 @@
+"""
+Author: jose.saavedra
+This is an example of using convolution with gabor filters
+"""
+
 import skimage.filters as filters
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.ndimage as ndimage
 import skimage.io as io
+
 
 if __name__ == '__main__' :
     filename = "images/chair.jpg"
