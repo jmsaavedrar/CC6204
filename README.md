@@ -19,15 +19,13 @@ ConvNet is a set of modules based on TensorFlow aiming to make the process of cr
          - imwidth: width of the target image
          - config: path to the the configuration file [See Configuration Section ](#the-configuration-file)
          - name: name of section in configuration file. The name is very important since the configuration file may include multiple configuration sections.
-         
       After creating data, the following files are also created:
         * mean.dat storing the mean of the training images 
-        * metadata.data storing the shape of the images [H,W,CH]
-        
+        * metadata.data storing the shape of the images [H,W,CH].
+     
      **Note**: Before creating data, we recommend to read the [Preparing Data Section](#preparing-data).
      
      Example
-     
      python3.6 tools/create_data.py -type 2 -imheight [height] -imwidth [width] -config [config-file] -name [name-model]
   
    **- train_test_model.py** [train, test, predict or save a cnn model]
