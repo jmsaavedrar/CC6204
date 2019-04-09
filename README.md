@@ -23,12 +23,12 @@ ConvNet is a set of modules based on TensorFlow aiming to make the process of cr
          
    After creating data, the following files are also created: **mean.dat**,  storing the mean of the training images 
    and **metadata.data**, storing the shape of the images [H,W,CH].
-        
-  **Note**: Before creating data, we recommend to read the [Preparing Data Section](#preparing-data).
+   
+   **Note**: Before creating data, we recommend to read the [Preparing Data Section](#preparing-data).
   
-  Example
+   Example
   
-  > python3.6 tools/create_data.py -type 2 -imheight [height] -imwidth [width] -config [config-file] -name [name-model]
+   > python3.6 tools/create_data.py -type 2 -imheight [height] -imwidth [width] -config [config-file] -name [name-model]
   
    * **train_test_model.py** [train, test, predict or save a cnn model]
       * Parameters
