@@ -129,8 +129,8 @@ For faster prediction you will need to run *tools/predict.py*
 
 
 # Other Datasets
-   - [A small version of mnist](https://www.dropbox.com/sh/se9n4tj3lh35rfm/AACTmKn7F5yVV-SaJbIWgHgna?dl=0)
-   - [QuicDraw-Animals](https://www.dropbox.com/sh/hsqjv0kd13xda3g/AABYkVk0ruG85s4aL4C1nDKaa?dl=0)
+   - [A small version of mnist](https://www.dropbox.com/sh/se9n4tj3lh35rfm/AACTmKn7F5yVV-SaJbIWgHgna?dl=0), for fast training.
+   - [QuicDraw-Animals](https://www.dropbox.com/sh/hsqjv0kd13xda3g/AABYkVk0ruG85s4aL4C1nDKaa?dl=0), including 12 classes of animales from the [QuickDraw](https://github.com/googlecreativelab/quickdraw-dataset) dataset
    
 **Contact**
 
