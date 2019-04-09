@@ -128,9 +128,9 @@ For faster prediction you will need to run *tools/predict.py*
 > python3.6 tools/predict.py -config [path to config file] -name MNIST -list [list of images to process]
 
 
-#Other Datasets
-   - A small version of mnist : https://www.dropbox.com/sh/se9n4tj3lh35rfm/AACTmKn7F5yVV-SaJbIWgHgna?dl=0
-   - QuicDraw-Animals : https://www.dropbox.com/sh/hsqjv0kd13xda3g/AABYkVk0ruG85s4aL4C1nDKaa?dl=0
+# Other Datasets
+   - [A small version of mnist](https://www.dropbox.com/sh/se9n4tj3lh35rfm/AACTmKn7F5yVV-SaJbIWgHgna?dl=0)
+   - [QuicDraw-Animals](https://www.dropbox.com/sh/hsqjv0kd13xda3g/AABYkVk0ruG85s4aL4C1nDKaa?dl=0)
    
 **Contact**
 
