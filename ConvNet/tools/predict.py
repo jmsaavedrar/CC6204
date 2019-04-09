@@ -45,8 +45,13 @@ if __name__ == "__main__" :
         print("Average elapsed time {} ".format(avg / n_images))
     
     elif not pargs.image is None :
-        start = time.time()                
-        predicted_probs, predicted_classes = faster_predictor.predict(pargs.image)
-        print("{} -> {}".format(predicted_classes[0], predicted_probs[0]))                
-        end = time.time()
-        print("Elased time {} ".format(end - start))
+        filename = pargs.image
+        while True : 
+            start = time.time()                
+            predicted_probs, predicted_classes = faster_predictor.predict(filename)
+            print("{} -> {}".format(predicted_classes[0], predicted_probs[0]))                
+            end = time.time()
+            print("Elased time {} ".format(end - start))            
+            filename = input("Image: ")
+            while len(filename) == 0 :
+                filename = input("Image: ")
