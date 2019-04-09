@@ -1,41 +1,41 @@
-# Description
-ConvolutionalNetwork is a set of modules based on TensorFlow aiming to make the process of creating, training and testing convolutional neural models easier. A module for a fast prediction, after saving the trained model, is also included.
+# ConvNet Description 
+ConvNet is a set of modules based on TensorFlow aiming to make the process of creating, training and testing convolutional neural models easier. A module for a fast prediction, after saving the trained model, is also included.
 
 # Structure
-## ccnLib: A package with the core modules
-   - data.py: A set of functions to create and read tfrecords. This also includes input function for estimators.
+## ccnLib: A package containing the core modules
+   - data.py: A set of functions to create and read tfrecords. This also includes input functions for estimators.
    - imgproc.py: A set of functions for image processing. The user can also add customized functions.
    - layers.py: A set of function for creating neural layers.
    - cnn_arch.py: A set of convolutional neural architectures. Here, customized nets are defined.
-   - cnn_model.py: Here, the model is created, which defines the optimizer and the specifications for training and testing.
+   - cnn_model.py: Here, the model is created which defines the optimizer and the specifications for training and testing.
    - configuration.py: Here the class ConfigurationFile is defined, it reads hyper-parameters from a configuration file.
    - cnn.py: Here, the class CNN is implemented. A detailed description of this class is discussed forward.
-   - fast_predictor.py: This contains the class *FastPredictor*, that allows us to run predictions in an efficient way (this avoids reloading the model). This class requires saving the checkpoints (a saved model), which can be obtained using the method -save- of CNN class.
+   - fast_predictor.py: This contains the class *FastPredictor*, that allows us to run predictions in an efficient way (this avoids reloading the model in each prediction). This class requires saving the checkpoints (a saved model), which can be obtained using the method -save- of CNN class.
 ## tools: A set of tools for creating tf_records and for training, testing and predicting using CNNs. 
-   **- create_data.py:** This generates *tf_records* files from a data folder containing two files: *train.txt* and *test.txt* each one specifing the images for training an testing, respectively. The txt files should be formatted in a two column style with the following syntax \<image path>\t\<class>.
+   **- create_data.py:** This generates *tf_records*  from a data folder containing two files: *train.txt* and *test.txt* each one specifing the images for training an testing, respectively. The text files should be formatted in a two column style with the following syntax \<image path>\t\<label>. The label columns should be in a 0-indexed format. You can use the tool *processInputFile.py* to convert string labels into 0-indexed integers.
       * Parameters
-         - type: [int, 0: onl train, 1: only test, 2: both]
+         - type: [int, 0: only train, 1: only test, 2: both]
          - imwheight: height of the target image
          - imwidth: width of the target image
          - config: path to the the configuration file [See Configuration Section ](#the-configuration-file)
-         - name: name of section in configuration file
+         - name: name of section in configuration file. The name is very important since the configuration file may include multiple configuration sections.
          
       After creating data, the following files are also created:
         * mean.dat storing the mean of the training images 
         * metadata.data storing the shape of the images [H,W,CH]
         
-     **Note**: Before creating data, we recommend to check the [Preparing Data Section](#preparing-data).
+     **Note**: Before creating data, we recommend to read the [Preparing Data Section](#preparing-data).
      
      Example
      
-     python3.6 tools/create_data.py -pathname [path-to-data] -type 2  -imheight [height] -imwidth [width] -config [config-file]  -name [name-model]
+     python3.6 tools/create_data.py -type 2 -imheight [height] -imwidth [width] -config [config-file] -name [name-model]
   
    **- train_test_model.py** [train, test, predict or save a cnn model]
       * Parameters
          - mode: [train | test | predit | save ]
          - device: [cpu | gpu]
          - ckpt: It defines a checkpoint for training or testing. In case of training this will be used for fine-tuning.
-         - image: A filename used only in *predict* mode
+         - image: A filename used only in *predict* mode. Predict model is deprecated, prefer fast-prediction.
          - config: A configuration file with the required hyper-parameters
          - name: Name of the section using in the configuration file
    
@@ -43,8 +43,8 @@ ConvolutionalNetwork is a set of modules based on TensorFlow aiming to make the 
 An CNN object is equiped with the following member functions:
    - train
    - test
-   - predict(image)
-   - predict_on_list(list_of_images)
+   - predict(image) [deprecated]
+   - predict_on_list(list_of_images) [deprecated]
    - save: To save a model for future prediction (it is recommended for faster predictions)
    
 To instatiate a CNN object a *configuration file* together with the following parameteres are required. 
@@ -54,7 +54,7 @@ To instatiate a CNN object a *configuration file* together with the following pa
 These parameters are passed through a dictionary. The parameters that must be defined in the configuration file are described below.
 
 # The Configuration File
-   - ARCH [name of the cnn architecture]
+   - ARCH [name of the cnn architecture]. This name is used in cnn_model.py
    - NUM_ITERATIONS = [int]
    - NUM_CLASSES = [int]
    - DATASET_SIZE = [int, number of images for training]
@@ -68,7 +68,7 @@ These parameters are passed through a dictionary. The parameters that must be de
    - CHANNELS = [int]
 
 # How to train a model
-Use train_test_mode.py using -mode test
+Use train_test_mode.py using -mode test 
 # How to test a model
 Use train_test_mode.py using -mode train
 
@@ -128,6 +128,10 @@ For faster prediction you will need to run *tools/predict.py*
 > python3.6 tools/predict.py -config [path to config file] -name MNIST -list [list of images to process]
 
 
+#Other Datasets
+   - A small version of mnist : https://www.dropbox.com/sh/se9n4tj3lh35rfm/AACTmKn7F5yVV-SaJbIWgHgna?dl=0
+   - QuicDraw-Animals : https://www.dropbox.com/sh/hsqjv0kd13xda3g/AABYkVk0ruG85s4aL4C1nDKaa?dl=0
+   
 **Contact**
 
 *Jose M. Saavedra*
