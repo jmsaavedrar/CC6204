@@ -133,6 +133,7 @@ For faster prediction you will need to run *tools/predict.py*
    - [QuicDraw-Animals](https://www.dropbox.com/sh/hsqjv0kd13xda3g/AABYkVk0ruG85s4aL4C1nDKaa?dl=0), including 12 classes of animales from the [QuickDraw](https://github.com/googlecreativelab/quickdraw-dataset) dataset
    
   Note: For training with a new dataset, you should to appropriately modify  some parameters in the configuration file.
+  
 **Contact**
 
 *Jose M. Saavedra*
