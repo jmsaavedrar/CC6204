@@ -90,12 +90,12 @@ Suppose we are involved in an new interesting project where training a CNN is re
 
 We name MNIST_DIR the path to the mnist data. This path should contain a file indicating the images to process. The file should be named as *list.txt* This has to follow a two-column style, where the first one is the image path and the second  one is the class (it could be a string).
 
-If you have already the test.txt and train.txt files, you can directly got ot step 3., otherwise run steps 1 and 2.
+If you have already the test.txt and train.txt files, you can directly got ot step 2., otherwise run steps 1.
 
-## Prepare the data
+## Step 1:  Prepare the data
 > python3.6 tools/processInputFile.py -path MNIST_DIR
 > python3.6 tools/divideFile.py -path MNIST_DIR -factor 0.8
-## Create tf_records
+## Step 2: Create tf_records
 > python3.6 tools/create_data.py -type 2 -imheight 40 -imwidth 40 -config [path to config file] -name MNIST
 
 An example of a configuration file is as follows:
@@ -115,13 +115,13 @@ An example of a configuration file is as follows:
  CHANNELS = 1
  ```
  After creating tf_records, please check that MNIST_DIR contains test.tfrecords and train.tfrecords.
-## Train
+## Step 3. Train
 > python3.6 tools/train_test_model.py -mode train -device gpu -name MNIST -config [path to config file]
-## Test
+## Step 4. Test
 > python3.6 tools/train_test_model.py -mode test -device gpu -name MNIST -config [path to config file]
-## Predict
+## Step 5 [optional]: Predict
 > python3.6 tools/train_test_model.py -mode test -device gpu -name MNIST -config [path to config file] -image [path to image to process]
-## Save the model for faster prediction 
+## Step 6 [optional]: Save the model for faster prediction 
 > python3.6 tools/train_test_model.py -mode save -device gpu -name MNIST -config [path to config file] -image [path to image to process]
 
 For faster prediction you will need to run *tools/predict.py*
