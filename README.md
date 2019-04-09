@@ -101,14 +101,14 @@ If you have already the test.txt and train.txt files, you can directly got ot st
 An example of a configuration file is as follows:
 ```
  [MNIST]
- ARCH = DIGIT
+ ARCH = MNIST
  NUM_ITERATIONS = 10000
  NUM_CLASSES = 10
  DATASET_SIZE =  60000
  TEST_SIZE = 10000
  BATCH_SIZE = 92
  SNAPSHOT_TIME = 500
- TEST_TIME = 150
+ TEST_TIME = 60
  LEARNING_RATE = 0.0001
  SNAPSHOT_DIR = [path where models will be saved]
  DATA_DIR = [path to data]
