@@ -13,7 +13,7 @@ ConvNet is a set of modules based on TensorFlow aiming to make the process of cr
    - fast_predictor.py: This contains the class *FastPredictor*, that allows us to run predictions in an efficient way (this avoids reloading the model in each prediction). This class requires saving the checkpoints (a saved model), which can be obtained using the method -save- of CNN class.
    
 ## tools: A set of tools for creating tf_records and for training, testing and predicting using CNNs 
-   * create_data.py: This generates *tf_records*  from a data folder containing two files: *train.txt* and *test.txt* each one specifing the images for training an testing, respectively. The text files should be formatted in a two column style with the following syntax \<image path>\t\<label>. The label column should be in a 0-indexed format. You can use the tool *processInputFile.py* to convert string labels into 0-indexed integers.   
+   * **create_data.py**: This generates *tf_records*  from a data folder containing two files: *train.txt* and *test.txt* each one specifing the images for training an testing, respectively. The text files should be formatted in a two column style with the following syntax \<image path>\t\<label>. The label column should be in a 0-indexed format. You can use the tool *processInputFile.py* to convert string labels into 0-indexed integers.   
       * Parameters
          * type: [int, 0: only train, 1: only test, 2: both]
          * imwheight: height of the target image
@@ -30,7 +30,7 @@ ConvNet is a set of modules based on TensorFlow aiming to make the process of cr
   
   > python3.6 tools/create_data.py -type 2 -imheight [height] -imwidth [width] -config [config-file] -name [name-model]
   
-   * train_test_model.py [train, test, predict or save a cnn model]
+   * **train_test_model.py** [train, test, predict or save a cnn model]
       * Parameters
          * mode: [train | test | predit | save ]
          * device: [cpu | gpu]
