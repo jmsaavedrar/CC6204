@@ -27,26 +27,9 @@ def model_fn (features, labels, mode, params):
     if mode == tf.estimator.ModeKeys.TRAIN:
         is_training = True
     else :
-        is_training = False
-    #creating the net according to  params["arch"]
-    #Mapping in the old version
-    #SIMPLE-CNN net_fn
-    #SIMPLE-LAR-CNN, SIMPLE-MNIST-CNN, SIMPLE-MNIST-EXT-CNN, SMPLE_PRINTED -> larnet
-    #SIMPLE-FONT-CNN -> font_fn
-    #SIMPLE-SIGNATURE-CNN -> signature_fn
-    #SIMPLE-DIGIT-CNN -> digitnet_fn
-    if params['arch'] == 'SIMPLE':
-        net = arch.net_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)                    
-    elif params['arch'] == 'LAR' :
-        net = arch.larnet_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)                
-    elif params['arch'] == 'FONT':
-        net = arch.font_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)                        
-    elif params['arch'] == 'SIGNATURE':
-        net = arch.signature_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)                
-    elif params['arch'] == 'DIGIT':
-        net = arch.digitnet_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)
-    elif params['arch'] == 'PHOTO-SKETCH':
-        net = arch.photo_sketch_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)        
+        is_training = False    
+    if params['arch'] == 'MNIST':
+        net = arch.mnistnet_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)                        
     else :
         raise ValueError("network architecture is unknown")
     #    
@@ -56,8 +39,7 @@ def model_fn (features, labels, mode, params):
     predicted_probs = tf.nn.softmax(output, name="pred_probs")
     #--------------------------------------    
     # If prediction mode, predictions is returned
-    predictions = { "predicted_probabilities": predicted_probs,
-                    "deep_features" : net["deep_features"]
+    predictions = { "predicted_probabilities": predicted_probs
                    }
     if mode == tf.estimator.ModeKeys.PREDICT:
         estim_specs = tf.estimator.EstimatorSpec(mode, predictions=predictions)
