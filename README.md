@@ -117,7 +117,7 @@ An example of a configuration file is as follows:
  After creating tf_records, please check that MNIST_DIR contains test.tfrecords and train.tfrecords.
 ## Step 3. Train
 > python3.6 tools/train_test_model.py -mode train -device gpu -name MNIST -config [path to config file]
-## Step 4. Test
+## Step 4 [optional]. Test
 > python3.6 tools/train_test_model.py -mode test -device gpu -name MNIST -config [path to config file]
 ## Step 5 [optional]: Predict
 > python3.6 tools/train_test_model.py -mode test -device gpu -name MNIST -config [path to config file] -image [path to image to process]
