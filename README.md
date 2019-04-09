@@ -42,8 +42,8 @@ ConvNet is a set of modules based on TensorFlow aiming to make the process of cr
 An CNN object is equiped with the following member functions:
    - train
    - test
-   - predict(image) [deprecated]
-   - predict_on_list(list_of_images) [deprecated]
+   - predict(image) [*deprecated*]
+   - predict_on_list(list_of_images) [*deprecated*]
    - save: To save a model for future prediction (it is recommended for faster predictions)
    
 To instatiate a CNN object a *configuration file* together with the following parameteres are required. 
