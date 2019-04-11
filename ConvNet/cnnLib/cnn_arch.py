@@ -36,7 +36,7 @@ def mnistnet_fn(features, input_shape, n_classes, n_channels, is_training = True
         
     with tf.variable_scope("class_layer"):        
         fc4 = layers.fc_layer(fc3, n_classes, name = 'fc4', use_relu = False)
-        print(" fc8: {} ".format(fc4.get_shape().as_list()))    
+        print(" fc4: {} ".format(fc4.get_shape().as_list()))    
         #gap = layers.gap_layer(conv_5) # 8x8
         #print(" gap: {} ".format(gap.get_shape().as_list()))    
     return {"output": fc4}
