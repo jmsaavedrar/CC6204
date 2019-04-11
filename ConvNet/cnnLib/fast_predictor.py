@@ -72,7 +72,7 @@ class FastPredictor:
                 names = [self.class_mapping.getClassName(item) for item in np.arange(len(predictions))]
             else :                  
                 names = [item for item in np.arange(len(predictions))]
-            idx_sorted = np.flip(np.argsort(predictions))
+            idx_sorted = np.flip(np.argsort(predictions), 0)
             sorted_names = [names[item] for item in idx_sorted]
             predictions = predictions[idx_sorted]
         return predictions, sorted_names
