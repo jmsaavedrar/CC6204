@@ -76,7 +76,7 @@ Use train_test_mode.py using -mode train
 1. Format the input file to have integer labels. This will produce *.jfile and *.mapping 
    > python3.6 tools/processInputFile.py -path [data path]
    
-   *- path* is the path where data can be found. It needs to contain a list.txt file wiht all the images to process. The list file should be formatted in a two-column style indicating the *name of the image* together with the *class name* (separated by a tab). The class name could be a string, the program will check the data and convert it into a valid format *(\*.jfile)*, where the class names are all  integers and zero-indexed. The mapping between the real name an the indexed names will be saved in the  *\*.mapping file.*      
+   *- path* is the path where data can be found. It needs to contain a list.txt file with all the images to process. The list file should be formatted in a two-column style indicating the *name of the image* together with the *class name* (separated by a tab). The class name could be a string, the program will check the data and convert it into a valid format *(\*.jfile)*, where the class names are all  integers and zero-indexed. The mapping between the real name an the indexed names will be saved in the  *\*.mapping file.*      
    
 2. Divide file into test.txt and train.txt
    > python3.6 tools/divideFile.py  -path [data path] -factor [percentage of training data e.g. 0.9]

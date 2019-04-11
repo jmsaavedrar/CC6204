@@ -6,3 +6,6 @@
 *.pydevproject
 *__pycache__
 
+#ignore IDE files
+.vscode/
+.idea/
