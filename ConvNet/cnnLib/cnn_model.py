@@ -30,6 +30,10 @@ def model_fn (features, labels, mode, params):
         is_training = False    
     if params['arch'] == 'MNIST':
         net = arch.mnistnet_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)                        
+    elif params['arch'] == 'SIMPLE_LARGER':
+        net = arch.net2_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)    
+    elif params['arch'] == 'SKETCH':
+        net = arch.sketchnet_fn(features, params['image_shape'], params['number_of_classes'], params['number_of_channels'], is_training)
     else :
         raise ValueError("network architecture is unknown")
     #    
